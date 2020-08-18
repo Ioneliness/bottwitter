@@ -16,6 +16,8 @@ def store_last_seen_id(tweet_id):
         file.write(str(tweet_id))
 
 
+import tweepy 
+
 def get_timeline():
     last_seen_id = get_last_seen_id()
     timeline = api.search('#BOTTHUMB', since_id=last_seen_id, tweet_mode='extended')
@@ -42,12 +44,39 @@ def get_timeline():
             tweet_id = tweet.id
             store_last_seen_id(tweet_id)
 
+def get_mentions():
+    last_seen_id = get_last_seen_id()
+    timeline = api.mentions_timeline(since_id=last_seen_id, tweet_mode='extended')
+    for tweet in reversed(timeline):
+        try:
+            tweet_id = tweet.id
+            text = tweet.full_text.replace(bot_user, '')
+            print(text)
+            if '@BotThumb' in text:
+                text = tweet.full_text
+                splited = text.split()
+                text = ''
+                for part in splited:
+                    if '#' not in part and bot_user not in part and '@' not in part:
+                        new_text += part +' '
+                if new_text:
+                    create_image_end(text)
+                    author_user = f'@{tweet.author.screen_name}'
+                    text = author_user
+                    api.update_with_media('images/atual.png', in_reply_to_status_id=tweet_id)
+                    store_last_seen_id(tweet_id)
+        except Exception as e:
+            print(e)
+            tweet_id = tweet.id
+            store_last_seen_id(tweet_id)
+
         
 
 if __name__ == '__main__':
     while True:
         try:
             get_timeline()
+            get_mentions()
             time.sleep(30)
         except Exception as e:
             print(e)
