@@ -37,7 +37,7 @@ def get_timeline():
                     create_image_end(new_text)
                     author_user = f'@{tweet.author.screen_name}'
                     text = author_user
-                    api.update_with_media('images/atual.png', in_reply_to_status_id=tweet_id)
+                    api.update_with_media('images/atual.png', text, in_reply_to_status_id=tweet_id)
                     store_last_seen_id(tweet_id)
         except Exception as e:
             print(e)
@@ -55,7 +55,7 @@ def get_mentions():
             create_image_end(new_text)
             author_user = f'@{tweet.author.screen_name}'
             text = author_user
-            api.update_with_media('images/atual.png', in_reply_to_status_id=tweet_id)
+            api.update_with_media('images/atual.png', text, in_reply_to_status_id=tweet_id)
             store_last_seen_id(tweet_id)
         except Exception as e:
             print(e)
