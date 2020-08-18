@@ -1,0 +1,2 @@
+/BotThumb/
+twitter.py
