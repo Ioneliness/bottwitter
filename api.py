@@ -25,7 +25,7 @@ def get_timeline():
             text = tweet.full_text.replace(bot_user, '')
             print(text)
             if '#BOTTHUMB' in text.upper():
-                text = tweet.full_text
+                text = tweet.full_text.replace('#BOTTHUMB', '')
                 splited = text.split()
                 new_text = ''
                 for part in splited:
@@ -35,7 +35,7 @@ def get_timeline():
                     create_image_end(text)
                     author_user = f'@{tweet.author.screen_name}'
                     text = author_user
-                    api.update_with_media('images/atual.png', in_reply_to_status_id=tweet_id)
+                    api.update_with_media('images/atual.png', text, in_reply_to_status_id=tweet_id)
                     store_last_seen_id(tweet_id)
         except Exception as e:
             print(e)
@@ -43,24 +43,33 @@ def get_timeline():
             store_last_seen_id(tweet_id)
 
 
+
 def get_timeline1():
     last_seen_id = get_last_seen_id()
-    timeline = api.mentions_timeline(since_id=last_seen_id, tweet_mode='extended')
+    timeline = api.search('@BotThumb', since_id=last_seen_id, tweet_mode='extended')
     for tweet in reversed(timeline):
         try:
             tweet_id = tweet.id
             text = tweet.full_text.replace(bot_user, '')
-            create_image_end(text)
-            author_user = f'@{tweet.author.screen_name}'
-            text = author_user
-            api.update_with_media('images/atual.png', text, in_reply_to_status_id=tweet_id)
-            store_last_seen_id(tweet_id)
+            print(text)
+            if '@BotThumb' in text:
+                text = tweet.full_text.replace('@BotThumb', '')
+                splited = text.split()
+                new_text = ''
+                for part in splited:
+                    if '#' not in part and bot_user not in part and '@' not in part:
+                        new_text += part +' '
+                if new_text:
+                    create_image_end(text)
+                    author_user = f'@{tweet.author.screen_name}'
+                    text = author_user
+                    api.update_with_media('images/atual.png', text, in_reply_to_status_id=tweet_id)
+                    store_last_seen_id(tweet_id)
         except Exception as e:
             print(e)
             tweet_id = tweet.id
-            store_last_seen_id(tweet_id)
-        
-        
+            store_last_seen_id(tweet_id)        
+
 if __name__ == '__main__':
     while True:
         try:
