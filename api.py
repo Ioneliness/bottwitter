@@ -49,17 +49,17 @@ def get_mentions():
     for tweet in reversed(timeline):
         try:
             tweet_id = tweet.id
-            text = tweet.full_text.replace(bot_user, '')
+            text = tweet.text.replace(bot_user, '')
             create_image_end(text)
             author_user = f'@{tweet.author.screen_name}'
-            text1 = author_user
-            api.update_with_media('images/atual.png', text1, in_reply_to_status_id=tweet_id)
+            text = author_user
+            api.update_with_media('images/atual.png', text, in_reply_to_status_id=tweet_id)
             store_last_seen_id(tweet_id)
+            break
         except Exception as e:
             print(e)
             tweet_id = tweet.id
             store_last_seen_id(tweet_id)
-        
 
 if __name__ == '__main__':
     while True:
