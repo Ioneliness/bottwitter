@@ -25,7 +25,6 @@ def get_timeline():
         try:
             tweet_id = tweet.id
             text = tweet.full_text.replace(bot_user, '')
-            print(text)
             if '#BOTTHUMB' in text.upper():
                 text = tweet.full_text
                 splited = text.split()
@@ -51,11 +50,10 @@ def get_mentions():
         try:
             tweet_id = tweet.id
             text = tweet.full_text.replace(bot_user, '')
-            print(text)
-            create_image_end(new_text)
+            create_image_end(text)
             author_user = f'@{tweet.author.screen_name}'
-            text = author_user
-            api.update_with_media('images/atual.png', text, in_reply_to_status_id=tweet_id)
+            text1 = author_user
+            api.update_with_media('images/atual.png', text1, in_reply_to_status_id=tweet_id)
             store_last_seen_id(tweet_id)
         except Exception as e:
             print(e)
