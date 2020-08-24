@@ -20,12 +20,12 @@ import tweepy
 
 def get_timeline():
     last_seen_id = get_last_seen_id()
-    timeline = api.search('#BOTTHUMB', since_id=last_seen_id, tweet_mode='extended')
+    timeline = api.search('#botthumb', since_id=last_seen_id, tweet_mode='extended')
     for tweet in reversed(timeline):
         try:
             tweet_id = tweet.id
             text = tweet.full_text.replace(bot_user, '')
-            if '#BOTTHUMB' in text.upper():
+            if '#botthumb' in text.lower():
                 text = tweet.full_text
                 splited = text.split()
                 new_text = ''
